@@ -188,34 +188,6 @@ void sacarTarea(Nodo ** tareasPendientes, Nodo ** tareasRealizadas){
         }
         
         
-        // do
-        // {
-        //     if (listaTareas->T.TareaID == id)
-        //     {
-        //         if (listaTareas = *tareasPendientes)
-        //         {
-        //             *tareasPendientes = listaTareas->Siguiente;
-        //         }
-        //         else
-        //         {
-        //             if (listaTareas->Siguiente->Siguiente == NULL)
-        //             {
-        //                 listaTareas->Siguiente == NULL;
-        //             }
-        //             else
-        //             {
-        //                 listaTareas->Siguiente = listaTareas->Siguiente->Siguiente;
-        //             }    
-        //         }
-        //         liberar = listaTareas;
-        //         tareaHecha = crearTarea(id, listaTareas->T.Descripcion, listaTareas->T.Duracion);
-        //     }
-        //     listaTareas = listaTareas->Siguiente;
-            
-        // } while (listaTareas == NULL);
-        // free(liberar);
-        
-        
     }
     
 }
