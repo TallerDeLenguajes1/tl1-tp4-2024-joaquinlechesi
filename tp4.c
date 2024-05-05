@@ -17,10 +17,10 @@ typedef struct Nodo
 Nodo * crearListaVacia();
 //void cargarTareas(Nodo ** tareasPendientes);
 Nodo * crearTarea(int id, char *descripcion, int duracion);
-void insertarTarea(Nodo ** tareasPendienes);
+void insertarTarea(Nodo ** tareasPendienes, int * p_id);
 void sacarTarea(Nodo ** tareasPendientes, Nodo ** tareasRealizadas);
 void listarTareas(Nodo ** tareasPendientes, Nodo ** tareasRealizadas);
-
+void buscarTarea(Nodo ** tareasPendientes, Nodo ** tareasRealizadas);
 int main()
 {
     Nodo * tareasPendientes; //cabecera
@@ -32,16 +32,18 @@ int main()
     //char letras[] = "hola";
     //Nodo * nuevaTarea = crearTarea(1000, letras, 100);
     //char respuesta;
-    int opcion;
+    int opcion, id = 1000;
+    //p_id = &id;
+
     //printf("Se esta ejecutando");
     do
     {
-        puts("Ingrese una opcion numerica:\n1 para agregar una tarea\n2 para marcar una tarea pendiente como realizada\n3 para listar tareas pendientes y tareas realizadas");
+        puts("Ingrese una opcion numerica:\n1 para agregar una tarea\n2 para marcar una tarea pendiente como realizada\n3 para listar tareas pendientes y tareas realizadas\n4 para buscar una tarea por ID o por DESCRIPCION");
         scanf("%d", &opcion);
         switch (opcion)
         {
         case 1:
-            insertarTarea(&tareasPendientes);
+            insertarTarea(&tareasPendientes, &id);
             break;
         case 2:
             sacarTarea(&tareasPendientes,&tareasRealizadas);
@@ -49,8 +51,11 @@ int main()
         case 3:
             listarTareas(&tareasPendientes,&tareasRealizadas);
             break;
+        case 4:
+            buscarTarea(&tareasPendientes,&tareasRealizadas);
+            break;
         default:
-            puts("Opcion incorrecta");
+            puts("Opcion incorrecta.");
             break;
         }
         
@@ -80,10 +85,10 @@ Nodo * crearTarea(int id, char *descripcion, int duracion){
     return nuevaTarea;
 }
 
-void insertarTarea(Nodo ** tareasPendienes){
+void insertarTarea(Nodo ** tareasPendienes, int * id){
     Nodo * nuevaTarea;
     nuevaTarea = crearListaVacia();
-    int id = 1000;
+    //int id = 1000;
     char * buff = (char *)malloc(50 * sizeof(char));
     int duracion;
     puts("Ingrese la descripcion de la tarea:");
@@ -93,8 +98,9 @@ void insertarTarea(Nodo ** tareasPendienes){
     scanf("%d", &duracion);
     if (*tareasPendienes == NULL)
     {
-        nuevaTarea = crearTarea(id, buff, duracion);
+        nuevaTarea = crearTarea(*id, buff, duracion);
         *tareasPendienes = nuevaTarea;
+        (*id)++;
     }
     else
     {
@@ -106,8 +112,9 @@ void insertarTarea(Nodo ** tareasPendienes){
             aux = aux->Siguiente;
             posicion = aux->T.TareaID;
         }
-        nuevaTarea = crearTarea(posicion+1, buff, duracion);
+        nuevaTarea = crearTarea(*id, buff, duracion);
         aux->Siguiente = nuevaTarea;
+        (*id)++;
     }
     free(buff);
 }
@@ -225,4 +232,76 @@ void listarTareas(Nodo ** tareasPendientes, Nodo ** tareasRealizadas){
         }
     }
     //free(lista);
+}
+
+void buscarTarea(Nodo ** tareasPendientes, Nodo ** tareasRealizadas){
+    Nodo * buscarTarea = crearListaVacia();
+    int idTarea, opcion;
+    char * descripcionTarea;
+    descripcionTarea = (char *)malloc(50 * sizeof(char));
+    puts("Si desea buscar una tarea por ID ingrese 1, si desea buscar una tarea por DESCRIPCION ingrese 2.");
+    do
+    {
+        scanf("%d", &opcion);
+        if (!(opcion != 1 && opcion != 2))
+        {
+            puts("La opcion ingresa es incorrecta");
+        }
+        
+    } while (opcion != 1 && opcion != 2);
+    if (opcion == 1)
+    {
+        buscarTarea = *tareasPendientes;
+        puts("Ingrese el ID de la tarea a buscar");
+        scanf("%d", &idTarea);
+        while (buscarTarea == *tareasPendientes || buscarTarea->Siguiente)
+        {
+            if (buscarTarea->T.TareaID == idTarea)
+            {
+                printf("La tarea solicitada por el ID %d es una TAREA PENDIENTE con la siguiente descripcion:\n%s", idTarea, buscarTarea->T.Descripcion);
+            }
+            // else
+            // {
+            //     puts("No se encontro tarea con el ID ingresado.");
+            // }
+            buscarTarea = buscarTarea->Siguiente;
+        }
+        buscarTarea = *tareasRealizadas;
+        while (buscarTarea == *tareasRealizadas || buscarTarea->Siguiente)
+        {
+            if (buscarTarea->T.TareaID == idTarea)
+            {
+                printf("La tarea solicitada por el ID %d es una TAREA REALIZADA con la siguiente descripcion:\n%s", idTarea, buscarTarea->T.Descripcion);
+            }
+            // else
+            // {
+            //     puts("No se encontro tarea con el ID ingresado.");
+            // }
+            buscarTarea = buscarTarea->Siguiente;
+        }
+    }
+    else
+    {
+        buscarTarea = *tareasPendientes;
+        puts("Ingrese la descripcion de la tarea a buscar");
+        fflush(stdin);
+        gets(descripcionTarea);
+        while (buscarTarea == *tareasPendientes || buscarTarea->Siguiente)
+        {
+            if (strcmp(descripcionTarea,buscarTarea->T.Descripcion) == 0)
+            {
+                printf("La tarea solicitada por DESCRIPCION %s es una TAREA PENDIENTE con el ID:\n%d\n", descripcionTarea, buscarTarea->T.TareaID);
+            }
+            buscarTarea = buscarTarea->Siguiente;
+        }
+        buscarTarea = *tareasRealizadas;
+        while (buscarTarea == *tareasRealizadas || buscarTarea->Siguiente)
+        {
+            if (strcmp(descripcionTarea,buscarTarea->T.Descripcion) == 0)
+            {
+                printf("La tarea solicitada por DESCRIPCION %s es una TAREA REALIZADA con el ID:\n%d\n", descripcionTarea, buscarTarea->T.TareaID);
+            }
+            buscarTarea = buscarTarea->Siguiente;
+        }
+    }
 }
