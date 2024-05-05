@@ -14,143 +14,243 @@ typedef struct Nodo
     struct Nodo * Siguiente;
 }Nodo;
 
-//Nodo * crearNodo();
-Nodo * cargarTareas();
-
+Nodo * crearListaVacia();
+//void cargarTareas(Nodo ** tareasPendientes);
+Nodo * crearTarea(int id, char *descripcion, int duracion);
+void insertarTarea(Nodo ** tareasPendienes);
+void sacarTarea(Nodo ** tareasPendientes, Nodo ** tareasRealizadas);
+void listarTareas(Nodo ** tareasPendientes, Nodo ** tareasRealizadas);
 
 int main()
 {
-    // int cantidad;
-    // printf("Ingrese la cantidad de tareas pendientes a cargar:\n");
-    // scanf("%d", &cantidad);
-    // struct Nodo *tareasPendientes = (struct Nodo *)malloc(cantidad * sizeof(struct Nodo));
-    // for (int i = 0; i < cantidad; i++)
-    // {
-    //     if (i == 0) //auto incrementativo desde 1000 en adelante
-    //     {
-    //         tareasPendientes[i].T.TareaID = 1000;
-    //         tareasPendientes[i].Siguiente = NULL;
-    //     }else
-    //     {
-    //         tareasPendientes[i].T.TareaID = tareasPendientes[i-1].T.TareaID + 1; //funciona bien
-    //         tareasPendientes[i-1].Siguiente = &tareasPendientes[i]; //funciona bien
-    //         tareasPendientes[i].Siguiente = NULL; //funciona bien
-    //     }
-    //     char *buff;
-    //     buff = (char *)malloc(100 * sizeof(char));
-    //     fflush(stdin);
-    //     gets(buff);
-    //     int tamanioCadena;
-    //     tamanioCadena = strlen(buff);
-    //     tareasPendientes[i].T.Descripcion = (char *)malloc(tamanioCadena+1 * sizeof(char));
-    //     strcpy(tareasPendientes[i].T.Descripcion,buff);
-    //     tareasPendientes[i].T.Duracion = rand() % 100 + 11;
-    // }
-    //struct Nodo *Inicio;
-    // int respuesta;
-    // Nodo * tarea = (Nodo *)malloc(sizeof(Nodo));
-    // Nodo * inicio = tarea;
-    // int ID = 1000;
-    // // puts("Ingrese la descripcion:");
-    // // scanf("");
-    // int contador = 0;
-    // do
-    // {
-    //     if (contador == 0)
-    //     {
-    //         tarea->T.TareaID = ID;
-    //     }
-    //     else
-    //     {
-    //         //aux->Siguiente = &tarea;
-    //         //aux = &tarea;
-    //         tarea->T.TareaID = ID+1;
-    //     }
-    //     puts("Ingrese la descripcion:");
-    //     scanf("\n");
+    Nodo * tareasPendientes; //cabecera
+    tareasPendientes = crearListaVacia();
+    Nodo * tareasRealizadas;
+    tareasRealizadas = crearListaVacia();
+    //tareasPendientes = (Nodo **)malloc(sizeof(Nodo *));
+    //cargarTareas(tareasPendientes);
+    //char letras[] = "hola";
+    //Nodo * nuevaTarea = crearTarea(1000, letras, 100);
+    //char respuesta;
+    int opcion;
+    //printf("Se esta ejecutando");
+    do
+    {
+        puts("Ingrese una opcion numerica:\n1 para agregar una tarea\n2 para marcar una tarea pendiente como realizada\n3 para listar tareas pendientes y tareas realizadas");
+        scanf("%d", &opcion);
+        switch (opcion)
+        {
+        case 1:
+            insertarTarea(&tareasPendientes);
+            break;
+        case 2:
+            sacarTarea(&tareasPendientes,&tareasRealizadas);
+            break;
+        case 3:
+            listarTareas(&tareasPendientes,&tareasRealizadas);
+            break;
+        default:
+            puts("Opcion incorrecta");
+            break;
+        }
         
-    //     tarea->Siguiente = NULL;
-    //     contador++;
-    //     puts("1 para ingresar otra tarea, 0 para finalizar:");
-    //     scanf("%d", &respuesta);
-    //     Nodo * tarea = (Nodo *)malloc(sizeof(Nodo));
-    // } while (respuesta == 0);
-
-    Nodo * Start;
-    Start = NULL;
-    Start = cargarTareas(); //retorna un puntero
-    //cargarTareas(Start);
-    //printf("El nodo inicial es: %p", Start);
+    } while (opcion != 0);
+    
 
     return 0;
 }
 
-// Nodo * crearNodo(){
-//     Nodo * nuevoNodo = (Nodo *)malloc(sizeof(Nodo));
-//     nuevoNodo->Siguiente = NULL;
-//     return nuevoNodo;
+Nodo * crearListaVacia(){
+    return NULL;
+}
+
+// void cargarTareas(Nodo ** tareasPendientes){
+    
 // }
 
-Nodo * cargarTareas(){
-    // Nodo nuevoNodo;
-    // Nodo primerNodo = nuevoNodo;
-    // Nodo * Nodo = &nuevoNodo;
-    // Nodo * aux = Nodo;
-    // int ID = 1000, contador = 0;
-    // char respuesta;
+Nodo * crearTarea(int id, char *descripcion, int duracion){
+    Nodo * nuevaTarea = (Nodo *)malloc(sizeof(Nodo));
+    nuevaTarea->T.TareaID = id;
+    int tamanio;
+    tamanio = strlen(descripcion);
+    nuevaTarea->T.Descripcion = (char *)malloc(tamanio+1 * sizeof(char));
+    strcpy(nuevaTarea->T.Descripcion,descripcion);
+    nuevaTarea->T.Duracion = duracion;
+    nuevaTarea->Siguiente = NULL;
+    return nuevaTarea;
+}
 
-    // do
-    // {
-    //     if (contador == 0)
-    //     {
-    //         Nodo->Siguiente = NULL;
-    //         Nodo->T.TareaID = ID;
-    //     }
-    //     else
-    //     {
-    //         //nuevoNodo->Siguiente = aux; // revisar el orden
-    //         aux->Siguiente = &nuevoNodo;
-    //         Nodo->T.TareaID = ID + contador;
-    //     }
-    //     aux = Nodo;
-    //     Nodo * Nodo = (Nodo *)malloc(sizeof(Nodo));
-    //     contador++;
-    //     puts("Desea ingresar otra tarea? Ingrese S para SI o N para NO");
-    //     scanf("%s", &respuesta);
-    // } while (respuesta == 's' || respuesta == 'S');
-    Nodo * primerNodo = (Nodo *)malloc(sizeof(Nodo)); //bien
-    Nodo * aux = NULL;
-    //primerNodo = nuevoNodo; //bien
-    aux = primerNodo;
-    int id = 1000, contador = 0;
-    int respuesta, tamanio;
-    do
+void insertarTarea(Nodo ** tareasPendienes){
+    Nodo * nuevaTarea;
+    nuevaTarea = crearListaVacia();
+    int id = 1000;
+    char * buff = (char *)malloc(50 * sizeof(char));
+    int duracion;
+    puts("Ingrese la descripcion de la tarea:");
+    fflush(stdin);
+    gets(buff);
+    puts("Ingrese la duracion de la tarea:");
+    scanf("%d", &duracion);
+    if (*tareasPendienes == NULL)
     {
-        if (contador == 0)
+        nuevaTarea = crearTarea(id, buff, duracion);
+        *tareasPendienes = nuevaTarea;
+    }
+    else
+    {
+        int posicion;
+        Nodo * aux = *tareasPendienes;
+        posicion = aux->T.TareaID;
+        while (aux->Siguiente)
         {
-            aux->T.TareaID = id;
+            aux = aux->Siguiente;
+            posicion = aux->T.TareaID;
+        }
+        nuevaTarea = crearTarea(posicion+1, buff, duracion);
+        aux->Siguiente = nuevaTarea;
+    }
+    free(buff);
+}
+
+void sacarTarea(Nodo ** tareasPendientes, Nodo ** tareasRealizadas){
+    Nodo * listaTareas = *tareasPendientes;
+    //Nodo * tareaLista;
+    int id;
+    if (*tareasPendientes ==  NULL)
+    {
+        puts("No se han cargado todavia tareas pendientes");
+    }
+    else
+    {
+        puts("Ingrese el ID de la tarea que desee marcar como realizada");
+        printf("ID: %d - DESCRIPCION: %s\n", listaTareas->T.TareaID, listaTareas->T.Descripcion);
+        while (listaTareas->Siguiente)
+        {
+            listaTareas = listaTareas->Siguiente;
+            printf("ID: %d - DESCRIPCION: %s\n", listaTareas->T.TareaID, listaTareas->T.Descripcion);
+        }
+        scanf("%d", &id);
+        listaTareas = *tareasPendientes;
+        
+        Nodo * tareaHecha = crearListaVacia();
+        Nodo * liberar;
+        if (listaTareas->T.TareaID == id)
+        {
+            tareaHecha = crearTarea(listaTareas->T.TareaID, listaTareas->T.Descripcion, listaTareas->T.Duracion);
+            liberar = listaTareas;
+            *tareasPendientes = listaTareas->Siguiente;
+            free(liberar);
         }
         else
         {
-            Nodo * nuevoNodo = (Nodo *)malloc(sizeof(Nodo));
-            aux->Siguiente = nuevoNodo;
-            aux = nuevoNodo;
-            aux->T.TareaID = id + contador;
+            while (listaTareas->Siguiente)
+            {
+                if (listaTareas->Siguiente->T.TareaID == id)
+                {
+                    tareaHecha = crearTarea(listaTareas->Siguiente->T.TareaID, listaTareas->Siguiente->T.Descripcion, listaTareas->Siguiente->T.Duracion);
+                    liberar = listaTareas->Siguiente;
+                    listaTareas->Siguiente = listaTareas->Siguiente->Siguiente;
+                    free(liberar);
+                }
+                // else
+                // {
+                //     puts("El ID no corresponde con una tarea cargada.");
+                // }
+                
+                if (listaTareas->Siguiente)
+                {
+                    listaTareas = listaTareas->Siguiente;
+                }
+            }
         }
-        aux->Siguiente = NULL;
-        printf("Tarea n° %d\nIngrese una descripcion de la tarea:", aux->T.TareaID);
-        char * buff = (char *)malloc(50 * sizeof(char));
-        fflush(stdin);
-        gets(buff);
-        tamanio = strlen(buff);
-        aux->T.Descripcion = (char *)malloc(tamanio+1 * sizeof(char));
-        strcpy(aux->T.Descripcion,buff);
-        aux->T.Duracion = rand() % 91 + 10; 
-        //printf("El nodo es %p\n", aux);
-        puts("Ingrese 1 para cargar otra tarea, ingrese cualquier otro numero para finalizar:");
-        scanf("%d", &respuesta);
-        contador++;
-    } while (respuesta == 1);
+
+        if (tareaHecha == NULL)
+        {
+            puts("El ID no corresponde con una tarea cargada.");
+        }
+        else
+        {
+            if (*tareasRealizadas == NULL)
+            {
+                *tareasRealizadas = tareaHecha;
+                //puts("if");
+            }
+            else
+            {
+                Nodo * aux = *tareasRealizadas;
+                while (aux->Siguiente)
+                {
+                    aux = aux->Siguiente;
+                }
+                aux->Siguiente = tareaHecha;
+            }
+            //free(tareaHecha);
+        }
+        
+        
+        // do
+        // {
+        //     if (listaTareas->T.TareaID == id)
+        //     {
+        //         if (listaTareas = *tareasPendientes)
+        //         {
+        //             *tareasPendientes = listaTareas->Siguiente;
+        //         }
+        //         else
+        //         {
+        //             if (listaTareas->Siguiente->Siguiente == NULL)
+        //             {
+        //                 listaTareas->Siguiente == NULL;
+        //             }
+        //             else
+        //             {
+        //                 listaTareas->Siguiente = listaTareas->Siguiente->Siguiente;
+        //             }    
+        //         }
+        //         liberar = listaTareas;
+        //         tareaHecha = crearTarea(id, listaTareas->T.Descripcion, listaTareas->T.Duracion);
+        //     }
+        //     listaTareas = listaTareas->Siguiente;
+            
+        // } while (listaTareas == NULL);
+        // free(liberar);
+        
+        
+    }
     
-    return primerNodo;
+}
+
+void listarTareas(Nodo ** tareasPendientes, Nodo ** tareasRealizadas){
+    Nodo * lista;
+    lista = crearListaVacia();
+    if (*tareasPendientes == NULL)
+    {
+        puts("No hay tareas pendientes para listar.");
+    }
+    else
+    {
+        lista = *tareasPendientes;
+        printf("Tareas pendientes\nID: %d - DESCRIPCION: %s\n", lista->T.TareaID, lista->T.Descripcion);
+        while (lista->Siguiente)
+        {
+            lista = lista->Siguiente;
+            printf("ID: %d - DESCRIPCION: %s\n", lista->T.TareaID, lista->T.Descripcion);
+        }
+    }
+    lista = crearListaVacia();
+    if (*tareasRealizadas == NULL)
+    {
+        puts("No hay tareas realizadas para listar.");
+    }
+    else
+    {
+        lista = *tareasRealizadas;
+        printf("Tareas realizadas\nID: %d - DESCRIPCION: %s\n", lista->T.TareaID, lista->T.Descripcion);
+        while (lista->Siguiente)
+        {
+            lista = lista->Siguiente;
+            printf("ID: %d - DESCRIPCION: %s\n", lista->T.TareaID, lista->T.Descripcion);
+        }
+    }
+    //free(lista);
 }
